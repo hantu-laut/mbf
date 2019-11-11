@@ -1,11 +1,64 @@
+"""
+ Seiring waktu gua mulai perhatiin nih file.
+ kebetulan gua pake windows 10.. yang aneh nya kok
+ ga ada warna nya ya? atau aneh nya malah keluar gini
+ 
+ >>> cetak("\m TES!")
+ hasil: \033[1;31mTES!
+ 
+ oh ya. tolong accept file gua bro. gua mau perbaikin
+ repositori lu oke
+"""
+
 import platform,os,sys
+
+# added!!!
+from subprocess import call as cmd
+# enddd
+
+def ulang():
+	while True:
+		x = raw_input("\033[25;33m[?] \033[25;37mMulai Ulang MBF [y/n] \033[25;32m")
+		if x is 'y' or x is 'Y':
+			cmd("MBF.py", shell=True)
+		elif x is 'N' or x is 'n':
+			print("GOODBYE :-)")
+			sys.exit()
+		else:
+			print("\033[25;31mERROR: \033[25;42m\033[25;30mOpsi salah\033[0m")
 def cetak(x,e=0):
-	w = 'mhkbpcP'
-	for i in w:
-		j = w.index(i)
-		x= x.replace('!%s'%i,'\033[%s;1m'%str(31+j))
-	x += '\033[0m'
-	x = x.replace('!0','\033[0m')
+	if os.name is 'linux' or os.name is 'linux2':
+		w = 'mhkbpcP'
+		for i in w:
+			j = w.index(i)
+			x= x.replace('!%s'%i,'\033[%s;1m'%str(31+j))
+		x += '\033[0m'
+		x = x.replace('!0','\033[0m')
+	elif os.name is 'win32' or os.name is 'nt' or os.name is 'win64':
+		# nginstall colorama. supaya support warna
+		try:
+			from colorama import init,AnsiToWin32
+			init()
+			for i in w:
+				j=w.index(i)
+				x=x.replace('!%s'%i,'\033[%s;1m'%str(31+j))
+			x+='\033[0m'
+			x=x.replace('!0','\033[0m')
+		except ImportError:
+			print "[!] Colorama Belum Di Install!\n[!] Tipe OS Yang kamu gunakan Windows tapi belum menginstall liblary yang satu ini."
+			xzxx = raw_input("[?] install colorama [y/n]  ")
+			if xzxx is 'y' or xzxx is 'Y':
+				print "[+] Menginstall colorama...."
+				cmd("pip install colorama",shell=True)
+				print "[*] Berhasil Menginstall colorama"
+				ulang()
+			else:
+				print """[!] MBF Tidak bisa berjalan tanpa colorama.
+    bila anda tidak menginstall sistem tersebut..
+    otomatis hasil output akan sedikit acak acakan.
+    dan malah menyiksa anda sendiri
+    """
+    		sys.exit()
 	if e != 0:
 		sys.stdout.write(x)
 	else:
@@ -319,9 +372,10 @@ def menu():
 		idteman()
 	elif i == 3:
 		keluar()
-bacaData()
-install_browser()
-menu()
+if __name__ =='__main__':
+	bacaData()
+	install_browser()
+	menu()
 #
 #
 #
